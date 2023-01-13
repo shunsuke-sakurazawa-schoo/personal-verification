@@ -1,0 +1,38 @@
+name: Create tag and release draft
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: 'example: v1.0.0'
+        required: true
+
+env:
+  TAG_NAME: ${{ github.event.inputs.tag_name }}
+
+permissions:
+  id-token: write
+  contents: read
+  actions: read
+
+jobs:
+  create-tag:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: main
+      - run: |
+          git tag $TAG_NAME
+          git push origin $TAG_NAME
+
+  create-release-draft:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: softprops/action-gh-release@v1
+        with:
+          draft: true
+          tag_name: github.event.inputs.tag_name
+          name: github.event.inputs.tag_name
+          body: ''
