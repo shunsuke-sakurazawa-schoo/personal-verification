@@ -12,8 +12,8 @@ env:
 
 permissions:
   id-token: write
-  contents: read
-  actions: read
+  contents: write
+  actions: write
 
 jobs:
   create-tag:
