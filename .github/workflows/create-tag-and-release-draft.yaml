@@ -21,7 +21,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
+          # ターゲットブランチをmainに固定
           ref: main
+          # 既存のタグを上書きしないようにfetchしておく。誤って既存タグを入力した場合「git tag」コマンドでエラーとなる。
+          fetch-depth: 0
       - run: |
           git tag $TAG_NAME
           git push origin $TAG_NAME
