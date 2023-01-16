@@ -29,6 +29,7 @@ jobs:
           ref: main
           # 既存のタグを上書きしないようにfetchしておく。誤って既存タグを入力した場合「git tag」コマンドで重複エラーとなる。
           fetch-depth: 0
+          persist-credentials: false
       - run: |
           git tag $TAG_NAME
           git push origin $TAG_NAME
