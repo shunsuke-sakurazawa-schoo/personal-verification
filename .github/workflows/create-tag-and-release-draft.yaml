@@ -33,6 +33,6 @@ jobs:
       - uses: softprops/action-gh-release@v1
         with:
           draft: true
-          tag_name: github.event.inputs.tag_name
-          name: github.event.inputs.tag_name
+          tag_name: ${{ env.TAG_NAME }}
+          name: ${{ env.TAG_NAME }}
           body: ''
