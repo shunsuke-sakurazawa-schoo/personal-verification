@@ -1,0 +1,20 @@
+name: Tag the api_server image with the specified version(dummy)
+# タグ打ちによってこのworkflowが動作するかの検証用。
+on:
+  push:
+    branches-ignore:
+      - '**'
+    tags:
+      - v*
+
+permissions:
+  id-token: write
+  contents: write
+  actions: write
+
+jobs:
+  dummy:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "It is a dummy job."
