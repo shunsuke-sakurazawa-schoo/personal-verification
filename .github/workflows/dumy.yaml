@@ -19,5 +19,10 @@ jobs:
   dummy:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v1
       - run: |
           echo "It is a dummy job."
+          REF=${{ github.ref }}
+          echo $REF
+          VERSION=${REF#refs/tags/}
+          echo $VERSION
