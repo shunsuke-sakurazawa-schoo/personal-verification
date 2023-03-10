@@ -27,7 +27,7 @@ jobs:
           -d \
           "[
             {
-              \"eventType\":\"DeployTest2\",
+              \"eventType\":\"DeployTestTwo\",
               \"repository\":\"${GITHUB_REPOSITORY#${GITHUB_REPOSITORY_OWNER}/}\"
               \"tag\":\"${IMAGE_TAG}\"
             }\
