@@ -1,0 +1,32 @@
+
+
+name: Send release count to newrelic
+on:
+  release:
+    types: [published]
+
+env:
+  NEWRELIC_ACCOUNT_ID: ${{ secrets.NEWRELIC_ACCOUNT_ID }}
+  NEWRELIC_LICENSE_KEY: ${{ secrets.NEWRELIC_LICENSE_KEY }}
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send release count to newrelic
+        run: |
+          curl -i \
+          -X POST 'https://insights-collector.newrelic.com/v1/accounts/${NEWRELIC_ACCOUNT_ID}/events' \
+          -H "X-Insert-Key:${NEW_RELIC_LICENSE_KEY}" \
+          -H "Content-Type: application/json" \
+          -d \
+          "[
+            {
+              \"eventType\":\"DeployTest\",
+              \"service\":\"swing\"
+            }\
+          ]"  
