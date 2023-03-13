@@ -1,6 +1,6 @@
 
 
-name: Send release count to newrelic
+name: Send release metric to newrelic
 on:
   release:
     types: [published]
@@ -14,10 +14,10 @@ permissions:
   actions: read
 
 jobs:
-  send-to-newrelic:
+  send-release-frequency:
     runs-on: ubuntu-latest
     steps:
-      - name: Send release count to newrelic
+      - name: Send release frequency to newrelic
         run: |
           IMAGE_TAG=$(echo ${{ github.ref }} | sed -e "s#refs/tags/##g")
           curl -i -f \
@@ -32,3 +32,30 @@ jobs:
               \"tag\":\"${IMAGE_TAG}\"
             }\
           ]"  
+
+  send-lead-time:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Set Up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 14
+        
+    - name: Install merged-pr-stat
+      run: |
+        npm install -g shibayu36/merged-pr-stat
+
+    - name: Post merged_pr_stat newrelic metrics
+      env:
+        TZ: 'JST-9'
+        GITHUB_TOKEN: ${{ secrets.PAT }}
+      run: |
+        start_date=(date '+%Y-%m-%dT00:00:00')
+        end_date=(date '+%Y-%m-%dT%T')
+        merged-pr-stat --query="repo:schooinc/schoo_swing base:main" --start=${start_date} --end=${end_date} > stat.json
+        cat stat.json  | jq '. |= .+ {"eventType": "LeadTimeTest"}' > newrelic.json
+        curl -i -f -d @newrelic.json \
+          -H "X-Insert-Key:${NEWRELIC_LICENSE_KEY}" \
+          -H "Content-Type: application/json" \
+          'https://insights-collector.newrelic.com/v1/accounts/${NEWRELIC_ACCOUNT_ID}/events'
+
