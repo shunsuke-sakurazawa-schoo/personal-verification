@@ -50,8 +50,8 @@ jobs:
         TZ: 'JST-9'
         GITHUB_TOKEN: ${{ secrets.PAT }}
       run: |
-        start_date=(date '+%Y-%m-%dT00:00:00')
-        end_date=(date '+%Y-%m-%dT%T')
+        start_date=$(date '+%Y-%m-%dT00:00:00')
+        end_date=$(date '+%Y-%m-%dT%T')
         merged-pr-stat --query="repo:schooinc/schoo_swing base:main" --start=${start_date} --end=${end_date} > stat.json
         cat stat.json  | jq '. |= .+ {"eventType": "LeadTimeTest"}' > newrelic.json
         curl -i -f -d @newrelic.json \
