@@ -19,6 +19,10 @@ jobs:
     steps:
       - name: Send release frequency to newrelic
         run: |
+          start_date=$(date '+%Y-%m-%dT00:00:00')
+          end_date=$(date '+%Y-%m-%dT%T')
+          echo ${start_date}
+          echo ${end_date}
           IMAGE_TAG=$(echo ${{ github.ref }} | sed -e "s#refs/tags/##g")
           curl -i -f \
           -X POST 'https://insights-collector.newrelic.com/v1/accounts/${NEWRELIC_ACCOUNT_ID}/events' \
