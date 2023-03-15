@@ -54,11 +54,11 @@ jobs:
     - name: Post merged_pr_stat newrelic metrics
       env:
         TZ: 'JST-9'
-        GITHUB_TOKEN: ${{ secrets.PAT }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         start_date=$(date '+%Y-%m-%dT00:00:00')
         end_date=$(date '+%Y-%m-%dT%T')
-        merged-pr-stat --query="repo:schooinc/schoo_swing base:main" --start=2023-03-01T00:00:00 --end=${end_date} > stat.json
+        merged-pr-stat --query="repo:shunsuke-sakurazawa-schoo/personal-verification" --start=2023-03-01T00:00:00 --end=${end_date} > stat.json
         cat stat.json  | jq '. |= .+ {"eventType": "LeadTimeTest"}' > newrelic.json
         curl -i -f -d @newrelic.json \
           -H "X-Insert-Key:${NEWRELIC_LICENSE_KEY}" \
